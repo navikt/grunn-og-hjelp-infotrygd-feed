@@ -24,6 +24,8 @@ spec:
   env:
     -   name: SPRING_PROFILES_ACTIVE
         value: dev
+    -   name: SPRING_FLYWAY_ENABLED
+        value: "false"
   gcp:
     sqlInstances:
       -   name: grunn-og-hjelp-infotrygd-feed
