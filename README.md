@@ -1,2 +1,3 @@
 # grunn-og-hjelp-infotrygd-feed
-Applikasjon for å publisere grunn- og hjelpestønad hendelser til infotrygd
+
+App som publiserer grunn- og hjelpestønad-hendelser til Infotrygd.

@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: grunn-og-hjelp-infotrygd-feed
+  threads:
+    virtual:
+      enabled: true
+  main:
+    keep-alive: true
+  datasource:
+    url: ${DB_JDBC_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      connection-test-query: select 1
+      max-lifetime: 90000
+      minimum-idle: 1
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AZURE_OPENID_CONFIG_ISSUER}
+          audiences: ${AZURE_APP_CLIENT_ID}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
+      base-path: /internal
+
+azure:
+  app:
+    tenant:
+      id: ${AZURE_APP_TENANT_ID}
+    client:
+      id: ${AZURE_APP_CLIENT_ID}
+  authorization-url: https://login.microsoftonline.com/${azure.app.tenant.id}/oauth2/v2.0/authorize
+  token-endpoint-url: https://login.microsoftonline.com/${azure.app.tenant.id}/oauth2/v2.0/token
+  api-scope: api://${azure.app.client.id}/.default
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+    disable-swagger-default-url: true
+    persist-authorization: true
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      client-id: ${azure.app.client.id}
+      scope-separator: ","

@@ -1,0 +1,95 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: grunn-og-hjelp-infotrygd-feed
+  namespace: grunn-og-hjelp
+
+spec:
+  # Applikasjon konfigurasjon
+  image: {{image}}
+  port: 8080
+  replicas:
+    min: 2
+    max: 2
+  leaderElection: true
+  kafka:
+    pool: nav-dev
+  resources:
+    limits:
+      memory: 1024Mi
+    requests:
+      cpu: 52m
+      memory: 704Mi
+
+  env:
+    -   name: SPRING_PROFILES_ACTIVE
+        value: dev
+  gcp:
+    sqlInstances:
+      -   name: grunn-og-hjelp-infotrygd-feed
+          type: POSTGRES_18
+          tier: db-g1-small
+          diskAutoresize: true
+          cascadingDelete: false
+          highAvailability: false
+          pointInTimeRecovery: true
+          maintenance:
+            day: 7
+            hour: 23
+          databases:
+            -   name: grunn-og-hjelp-infotrygd-feed
+                envVarPrefix: DB
+
+  # Nettverk
+  ingresses:
+    - https://grunn-og-hjelp-infotrygd-feed.intern.dev.nav.no
+  accessPolicy:
+    inbound:
+      rules:
+        - application: infotrygd-feed-proxy-v2
+          namespace: infotrygd
+          cluster: dev-fss
+        - application: grunn-og-hjelpestonad
+    outbound:
+      rules:
+          # Team Logs
+        -   application: logging
+            namespace: nais-system
+
+  # Helse
+  liveness:
+    path: /internal/health/liveness
+    initialDelay: 30
+    failureThreshold: 10
+  readiness:
+    path: /internal/health/readiness
+    initialDelay: 30
+    failureThreshold: 10
+
+  # Logging
+  prometheus:
+    enabled: true
+    path: /internal/prometheus
+
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
+    logging:
+      destinations:
+        -   id: loki
+        -   id: elastic
+
+  # Autentisering
+  azure:
+    application:
+      enabled: true
+      tenant: trygdeetaten.no
+      claims:
+        groups:
+          - id: 7ce9d1d2-d149-4324-832b-8d459762a102 # grunn-og-hjelp-forvaltning
+        extra:
+          - "NAVident"
+      replyURLs:
+        - https://grunn-og-hjelp-infotrygd-feed.intern.dev.nav.no/swagger-ui/oauth2-redirect.html
+      singlePageApplication: true
