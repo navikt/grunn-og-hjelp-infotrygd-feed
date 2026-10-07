@@ -4,17 +4,18 @@ App som publiserer grunn- og hjelpestønad-hendelser til Infotrygd.
 
 ## Feed-API
 
-`GET /api/grunnstonad/v1/feed?sistLesteSekvensId=<sekvensnummer>` returnerer hendelser med
-høyere sekvensnummer, sortert stigende. Hvert kall henter maksimalt 100 elementer.
-API-et følger responsformatet fra familie-feedene; hendelsestype og innhold holdes
-generiske inntil kontrakten for grunn- og hjelpestønad-hendelser er avklart.
+Kallet som skal brukes av infotrygd og infotrygd-proxy: `GET /api/grunnstonad/v1/feed?sistLesteSekvensId=<sekvensnummer>` 
+denne returnerer hendelser med høyere sekvensnummer, sortert stigende. Hvert kall henter maksimalt 100 elementer.
+API-et følger responsformatet fra familie-feedene og returnerer hendelsestype samt
+typet innhold for vedtak og startbehandling. Innholdet lagres som JSONB i databasen
+med `writeValueAsString` og leses til riktig innholdsmodell med `readValue`.
 
-Tilgang fra `infotrygd-feed-proxy-v2` er konfigurert i `.nais/dev.yaml`.
-Grunnstønad lagres i den egne `grunnstonad_feed`-tabellen; hjelpestønad kan senere
-få en separat `hjelpestonad_feed`-tabell. Grunnstønad-feedtabellen er opprettet,
-med `type`, `person_ident` og `dato_start_ny_grunnstonad`; den vil være tom inntil
-innskriving av hendelser er implementert.
+Grunnstønad-appen kan lagre hendelser med `POST /api/grunnstonad/v1/feed/vedtaksmelding`
+(`personIdent`, `datoStartNyGrunnstønad`) og
+`POST /api/grunnstonad/v1/feed/startbehandlingsmelding` (`personIdent`). Begge
+endepunktene svarer `204 No Content`; opprettede hendelser får sekvensnummer fra databasen.
 
-Bygg-workflowen verifiserer pull requests og push til brancher uten å deploye.
-Dev-deploy startes manuelt fra `main` med `Deploy to dev`. Flyway er deaktivert i
-dev inntil databasemigrasjonene er klare til å kjøres.
+## Tester
+
+Kjør `mvn verify` med Docker tilgjengelig. Integrasjonstestene starter PostgreSQL 18
+automatisk via Testcontainers og kjører Flyway-migreringene mot denne databasen.

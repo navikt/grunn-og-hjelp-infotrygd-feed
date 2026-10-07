@@ -24,4 +24,4 @@ jobs:
           java-version: "25"
           cache: maven
       - name: Build with Maven
-        run: mvn -B --no-transfer-progress verify -Dspring.flyway.enabled=false
+        run: mvn -B --no-transfer-progress verify

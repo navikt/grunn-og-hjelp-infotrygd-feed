@@ -48,10 +48,16 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: grunn-og-hjelpestonad
+          permissions:
+            roles:
+              - write_feed
         - application: infotrygd-feed-proxy-v2
           namespace: infotrygd
           cluster: dev-fss
-        - application: grunn-og-hjelpestonad
+          permissions:
+            roles:
+              - read_feed
     outbound:
       rules:
           # Team Logs

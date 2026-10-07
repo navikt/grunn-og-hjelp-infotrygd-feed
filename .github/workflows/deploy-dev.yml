@@ -22,7 +22,7 @@ jobs:
           java-version: "25"
           cache: maven
       - name: Verify application
-        run: mvn -B --no-transfer-progress verify -Dspring.flyway.enabled=false
+        run: mvn -B --no-transfer-progress verify
       - uses: nais/docker-build-push@0e73849f69ff260ee27597553c0a7848ca4e9795 # ratchet:nais/docker-build-push@v0
         id: docker-push
         with:

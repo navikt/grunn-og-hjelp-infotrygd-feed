@@ -1,10 +1,11 @@
 # Integrasjonstest konfigurasjon
-# Minimal konfig for integrasjonstester - kun datasource og Unleash greier
 
 # Spring konfigurasjon
 spring:
   main:
     allow-bean-definition-overriding: true
+  flyway:
+    enabled: true
   kafka:
     security:
       protocol: PLAINTEXT
