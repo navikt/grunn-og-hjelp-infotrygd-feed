@@ -25,7 +25,7 @@ interface Innhold
 
 data class InnholdVedtak(
     val personIdent: String,
-    val datoStartNyGrunnstønad: LocalDate,
+    val datoStartNyGrunnstoenad: LocalDate,
 ) : Innhold
 
 data class InnholdStartBehandling(

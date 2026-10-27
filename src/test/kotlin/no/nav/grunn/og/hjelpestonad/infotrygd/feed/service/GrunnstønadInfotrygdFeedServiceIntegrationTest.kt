@@ -69,12 +69,12 @@ class GrunnstønadInfotrygdFeedServiceIntegrationTest {
         assertEquals(
             InnholdVedtak(
                 personIdent = "12345678901",
-                datoStartNyGrunnstønad = LocalDate.parse("2026-01-01"),
+                datoStartNyGrunnstoenad = LocalDate.parse("2026-01-01"),
             ),
             feed.elementer.single().innhold,
         )
         assertEquals(
-            objectMapper.readTree("""{"personIdent":"12345678901","datoStartNyGrunnstønad":"2026-01-01"}"""),
+            objectMapper.readTree("""{"personIdent":"12345678901","datoStartNyGrunnstoenad":"2026-01-01"}"""),
             objectMapper
                 .readTree(objectMapper.writeValueAsString(feed))
                 .at("/elementer/0/innhold"),

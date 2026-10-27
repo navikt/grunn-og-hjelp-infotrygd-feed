@@ -36,7 +36,7 @@ class GrunnstønadInfotrygdFeedService(
             innhold =
                 InnholdVedtak(
                     personIdent = melding.personIdent,
-                    datoStartNyGrunnstønad = melding.datoStartNyGrunnstønad,
+                    datoStartNyGrunnstoenad = melding.datoStartNyGrunnstønad,
                 ),
         )
     }
