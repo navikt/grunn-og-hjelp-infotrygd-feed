@@ -2,6 +2,7 @@ version: 2
 
 multi-ecosystem-groups:
   dependencies:
+    open-pull-requests-limit: 5
     schedule:
       interval: "weekly"
       day: "monday"
@@ -13,7 +14,6 @@ updates:
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "dependencies"
-    open-pull-requests-limit: 5
     groups:
       security:
         applies-to: "security-updates"
@@ -23,7 +23,6 @@ updates:
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "dependencies"
-    open-pull-requests-limit: 5
     groups:
       security:
         applies-to: "security-updates"
