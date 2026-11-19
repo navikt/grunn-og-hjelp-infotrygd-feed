@@ -1,6 +1,16 @@
 name: Deploy to dev
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**.md'
+      - '**.MD'
+      - '.github/**.yaml'
+      - '.gitignore'
+      - 'CODEOWNERS'
+      - 'LICENSE'
 
 permissions:
   contents: read
@@ -27,6 +37,7 @@ jobs:
         id: docker-push
         with:
           team: grunn-og-hjelp
+          pull: true
       - uses: nais/deploy/actions/deploy@6fe576e10c7a325643bad96566bd6cb180a2f782 # ratchet:nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
