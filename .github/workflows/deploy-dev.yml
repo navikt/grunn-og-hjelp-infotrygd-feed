@@ -12,14 +12,19 @@ on:
       - 'CODEOWNERS'
       - 'LICENSE'
 
-permissions:
-  contents: read
-  id-token: write
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     name: Build and deploy to dev
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout
+      id-token: write # OIDC for nais/docker-build-push (GAR) og nais/deploy
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7
         with:
@@ -32,7 +37,7 @@ jobs:
           cache: maven
       - name: Verify application
         run: mvn -B --no-transfer-progress verify
-      - uses: nais/docker-build-push@0e73849f69ff260ee27597553c0a7848ca4e9795 # ratchet:nais/docker-build-push@v0
+      - uses: nais/docker-build-push@588f76a6f45aeb1e75d5e8417ec6ef6d79b2b39f # ratchet:nais/docker-build-push@v0
         id: docker-push
         with:
           team: grunn-og-hjelp

@@ -14,6 +14,8 @@ updates:
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "dependencies"
+    cooldown:
+      default-days: 7
     groups:
       security:
         applies-to: "security-updates"
@@ -23,6 +25,8 @@ updates:
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "dependencies"
+    cooldown:
+      default-days: 7
     groups:
       security:
         applies-to: "security-updates"
